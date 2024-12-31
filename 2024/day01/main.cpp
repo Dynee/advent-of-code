@@ -9,8 +9,8 @@ std::string ltrim(const std::string& s) {
 	return std::string(start, s.end());
 }
 
-int main() {
-	std::ifstream inputFile("input.txt");
+std::tuple<std::vector<int>, std::vector<int>> read_input(std::string file_name) {
+	std::ifstream inputFile(file_name);
 
 	std::string line;
 	std::string delim = " ";
@@ -29,16 +29,28 @@ int main() {
 		}
 		inputFile.close();
 	}
+
+	return {left, right};
+}
+
+int get_sum_of_smallest(std::vector<int> left, std::vector<int> right) {
+	int total = 0;
 	
 	std::sort(left.begin(), left.end());
 	std::sort(right.begin(), right.end());
-
-	int total = 0;
 
 	for (int i = 0; i < left.size(); i++) {
 		int diff = std::abs(left[i] - right[i]);
 		total += diff;
 	}
+	
+	return total;
+}
+
+int main() {
+	auto [left, right] = read_input("input.txt");	
+	
+	int total = get_sum_of_smallest(left, right);	
 
 	std::cout << total << "\n";
 
