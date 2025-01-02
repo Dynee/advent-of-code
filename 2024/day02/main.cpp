@@ -1,10 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <unordered_map>
 #include <vector>
-#include <algorithm>
-#include <sstream>
 #include <bits/stdc++.h>
 
 int is_safe(const std::vector<int> &report)
