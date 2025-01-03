@@ -2,87 +2,81 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <sstream>
+
 
 int is_safe(const std::vector<int> &report)
 {
 	int i = 0;
 	int j = 1;
-	int res = 0;
 
-	bool is_increasing = false;
+	std::vector<int> order;
 
-	while (j != report.size())
-	{
-		std::cout << report[i] << " " << report[j] << "\n";
-		// increasing
-		if (report[i] < report[j])
-		{
-			if (is_increasing && report[j] < report[i - 1])
-			{
-				return 0;
-			}
-
-			is_increasing = true;
-			int diff = report[j] - report[i];
-
-			if (diff > 3)
-			{
-				std::cout << "not safe" << "\n";
-				return 0;
-			}
-		}
-		// decreasing
-		else if (report[i] > report[j])
-		{
-			if (!is_increasing && report[j] > report[i - 1])
-			{
-				return 0;
-			}
-
-			is_increasing = false;
+	while (j != report.size()) {
+		if (report[i] > report[j]) {
 			int diff = report[i] - report[j];
-			if (diff > 3)
-			{
-				std::cout << "not safe" << "\n";
-				return 0;
-			}
+			if (diff > 3 || diff == 0) return 0;
+			order.push_back(1);
+		} else if (report[i] < report[j]) {
+			int diff = report[j] - report[i];
+			if (diff > 3 || diff == 0) return 0;
+			order.push_back(0);
+		} else {
+			return 0;
 		}
 		i++;
 		j++;
 	}
 
-	std::cout << "safe" << "\n";
+	// The vector should contain all 0's or all 1's.
+	if (order.empty()) return 0;
+
+	for (size_t v = 0; v < order.size(); v++) {
+		if (order[v] != order[0]) return 0;
+	}
+
 	return 1;
 }
 
-int solve(std::string file_name)
+std::vector<std::string> split(const std::string& str, const char delimiter) {
+	std::vector<std::string> tokens;
+	std::string token;
+	std::stringstream ss(str);
+
+	while (std::getline(ss, token, delimiter)) {
+		tokens.push_back(token);
+	}
+
+	return tokens;
+}
+
+int solve(const std::string& file_name)
 {
 	int safe_report_count = 0;
 
-	std::ifstream inputFile(file_name);
+	std::ifstream file(file_name);
+
+	if (!file.is_open())
+		return -1;
 
 	std::string line;
-	std::string delim = " ";
 
-	if (inputFile.is_open())
-	{
-		while (std::getline(inputFile, line))
-		{
-			std::cout << "line: " << line << "\n";
-			std::vector<int> report;
+	while (std::getline(file, line)) {
+		std::cout << line << "\n";
+		std::vector<std::string> tokens = split(line, ' ');
 
-			for (char &c : line)
-			{
-				if (c != ' ')
-				{
-					report.push_back(c - '0');
-				}
-			}
+		std::vector<int> report;
 
-			// determine if report is safe.
-			safe_report_count += is_safe(report);
+		report.reserve(tokens.size());
+
+		for (auto &c : tokens) {
+			std::cout << c << "\n";
+			report.push_back(std::stoi(c));
 		}
-		inputFile.close();
+
+		int safe_count = is_safe(report);
+		std::cout << "safe: " << safe_count << "\n";
+		safe_report_count += safe_count;
 	}
 
 	return safe_report_count;
