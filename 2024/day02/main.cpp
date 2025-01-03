@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <bits/stdc++.h>
 
 int is_safe(const std::vector<int> &report)
 {
@@ -91,19 +90,12 @@ int solve(std::string file_name)
 
 int main()
 {
-	std::ofstream cout("output.txt");
-
-	// optional performance optimizations
-	std::ios_base::sync_with_stdio(false);
-	std::cin.tie(0);
-
-	std::cin.rdbuf(std::cin.rdbuf());
-	std::cout.rdbuf(cout.rdbuf());
-
 	std::string file_name;
-	std::cout << "Enter a file name: ";
+	std::cout << "Enter file name: ";
 	std::cin >> file_name;
-	std::cout << "safe count: " << solve(file_name) << "\n";
+
+	int result = solve(file_name);
+	std::cout << "answer: " << result << "\n";
 
 	return 0;
 }
