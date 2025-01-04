@@ -3,9 +3,10 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <bits/stdc++.h>
 
 
-int is_safe(const std::vector<int> &report)
+int is_safe(const std::vector<int>& report)
 {
 	int i = 0;
 	int j = 1;
@@ -38,6 +39,28 @@ int is_safe(const std::vector<int> &report)
 	return 1;
 }
 
+int is_safe_after_level_removal(const std::vector<int>& report) {
+	if (is_safe(report)) {
+		return 1;
+	}
+
+	// Check if removing a level will make the report safe.
+	for (size_t i = 0; i < report.size(); ++i) {
+		// Copy the original vector so that we preserve our original report.
+		std::vector<int> copy_report = report;
+
+		// Remove the level from the report.
+		copy_report.erase(copy_report.begin() + i);
+
+		// Check if the report is safe after removing the level.
+		if (is_safe(copy_report)) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 std::vector<std::string> split(const std::string& str, const char delimiter) {
 	std::vector<std::string> tokens;
 	std::string token;
@@ -62,7 +85,6 @@ int solve(const std::string& file_name)
 	std::string line;
 
 	while (std::getline(file, line)) {
-		std::cout << line << "\n";
 		std::vector<std::string> tokens = split(line, ' ');
 
 		std::vector<int> report;
@@ -70,13 +92,10 @@ int solve(const std::string& file_name)
 		report.reserve(tokens.size());
 
 		for (auto &c : tokens) {
-			std::cout << c << "\n";
 			report.push_back(std::stoi(c));
 		}
 
-		int safe_count = is_safe(report);
-		std::cout << "safe: " << safe_count << "\n";
-		safe_report_count += safe_count;
+		safe_report_count += is_safe_after_level_removal(report);
 	}
 
 	return safe_report_count;
@@ -85,7 +104,7 @@ int solve(const std::string& file_name)
 int main()
 {
 	std::string file_name;
-	std::cout << "Enter file name: ";
+	std::cout << "Enter file name:  ";
 	std::cin >> file_name;
 
 	int result = solve(file_name);
