@@ -20,8 +20,6 @@ int main() {
 
   int n = 4;
 
-  int max_depth = rows.size() - n;
-
   int sum = 0;
 
   for (int i = 0; i < rows.size(); i++) {
@@ -32,6 +30,7 @@ int main() {
       std::string left_diagonal = "";
       std::string vertical = "";
       std::string right_diagonal = "";
+      std::string top_left_diagonal = "";
 
       for (int k = 0; k < n; k++) {
         // the horizontal
@@ -39,20 +38,20 @@ int main() {
         right_horizontal += rows[i][k + j];
       }
 
-      if (right_horizontal == "XMAS") {
+      if (right_horizontal == "XMAS" || right_horizontal == "SAMX") {
         sum++;
       }
 
       std::cout << "\n";
 
-      if (rows.size() - i > n) {
+      if (rows.size() - i >= n) {
         for (int l = 0; l < n; l++) {
           // the right diagonal
           std::cout << rows[i + l][j + l];
           right_diagonal += rows[i + l][j + l];
         }
 
-        if (right_diagonal == "XMAS") {
+        if (right_diagonal == "XMAS" || right_horizontal == "SAMX") {
           sum++;
         }
 
@@ -64,7 +63,7 @@ int main() {
           vertical += rows[i + m][j];
         }
         std::cout << "\n";
-        if (vertical == "XMAS") {
+        if (vertical == "XMAS" || vertical == "SAMX") {
           sum++;
         }
 
@@ -73,7 +72,7 @@ int main() {
           std::cout << rows[i + o][j - o];
           left_diagonal += rows[i + o][j - o];
         }
-        if (left_diagonal == "XMAS") {
+        if (left_diagonal == "XMAS" || left_diagonal == "SAMX") {
           sum++;
         }
       }
@@ -85,7 +84,7 @@ int main() {
         std::cout << rows[i][j - p];
         left_horizontal += rows[i][j - p];
       }
-      if (left_horizontal == "XMAS") {
+      if (left_horizontal == "XMAS" || left_horizontal == "SAMX") {
         sum++;
       }
 
